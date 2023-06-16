@@ -1,5 +1,4 @@
 -- Library Dragonmaid
--- Library Dragonmaid
 -- ID: 999000499
 -- Tipo: Dragón/Normal
 -- Atributo: Fuego
@@ -19,7 +18,7 @@ function c999000499.initial_effect(c)
     e1:SetTarget(c999000499.thTarget)
     e1:SetOperation(c999000499.thOperation)
     c:RegisterEffect(e1)
-    local e2 = e1:Clone()
+    local e2 = Effect.CreateEffect(c)
     e2:SetCode(EVENT_SPSUMMON_SUCCESS)
     c:RegisterEffect(e2)
 
