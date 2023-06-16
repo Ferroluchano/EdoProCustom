@@ -10,19 +10,22 @@ function c999000499.initial_effect(c)
     -- Efecto de Invocación
     -- Si esta carta es Invocada de Modo Normal o Especial, puedes seleccionar 1 monstruo "Dragonmaid" de Nivel 4 o menor en tu Cementerio y añadirlo a tu mano, pero no puedes activar sus efectos hasta el comienzo de la Fase de Batalla.
     local e1 = Effect.CreateEffect(c)
-    e1:SetCategory(CATEGORY_TOHAND + CATEGORY_SPECIAL_SUMMON)
-    e1:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_O)
+    e1:SetCategory(CATEGORY_TOHAND)
+    e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
     e1:SetCode(EVENT_SUMMON_SUCCESS)
     e1:SetProperty(EFFECT_FLAG_DELAY)
     e1:SetCondition(c999000499.thCondition)
     e1:SetTarget(c999000499.thTarget)
     e1:SetOperation(c999000499.thOperation)
     c:RegisterEffect(e1)
+    local e2 = e1:Clone()
+    e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+    c:RegisterEffect(e2)
 
     -- Efecto de Retorno
     -- Puedes devolver esta carta a la mano y, si lo haces, Invoca de Modo Especial 1 monstruo "Dragonmaid" de Nivel 7 o mayor desde tu mano o Cementerio.
     local e3 = Effect.CreateEffect(c)
-    e3:SetCategory(CATEGORY_TOHAND + CATEGORY_SPECIAL_SUMMON)
+    e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SPECIAL_SUMMON)
     e3:SetType(EFFECT_TYPE_IGNITION)
     e3:SetRange(LOCATION_MZONE)
     e3:SetCountLimit(1)
@@ -38,7 +41,7 @@ function c999000499.thCondition(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c999000499.thFilter(c)
-    return c:IsRace(RACE_DRAGON) and c:IsAttribute(ATTRIBUTE_FIRE) and c:IsLevelBelow(4) and c:IsAbleToHand()
+    return c:IsSetCard(0x133) and c:IsLevelBelow(4) and c:IsRace(RACE_DRAGON) and c:IsAttribute(ATTRIBUTE_FIRE) and c:IsAbleToHand()
 end
 
 function c999000499.thTarget(e,tp,eg,ep,ev,re,r,rp,chk)
