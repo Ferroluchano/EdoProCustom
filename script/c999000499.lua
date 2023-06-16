@@ -11,7 +11,7 @@ function c999000499.initial_effect(c)
     e1:SetDescription(aux.Stringid(999000499,0))
     e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
     e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-    e1:SetCode(EVENT_SUMMONED)
+    e1:SetCode(EVENT_SUMMON_SUCCESS)
     e1:SetProperty(EFFECT_FLAG_DELAY)
     e1:SetTarget(c999000499.searchTarget)
     e1:SetOperation(c999000499.searchOperation)
@@ -61,6 +61,4 @@ end
 function c999000499.spSummonOperation(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if c:IsRelateToEffect(e) and Duel.SendtoHand(c,nil,REASON_EFFECT)~=0 and c:IsLocation(LOCATION_HAND) then
-        Duel.ConfirmCards(1-tp,c)
-        Duel.Hint(HINT_SELECTMSG
-end
+       
