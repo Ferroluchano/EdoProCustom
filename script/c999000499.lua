@@ -63,3 +63,4 @@ function c999000499.spSummonOperation(e,tp,eg,ep,ev,re,r,rp)
     if c:IsRelateToEffect(e) and Duel.SendtoHand(c,nil,REASON_EFFECT)~=0 and c:IsLocation(LOCATION_HAND) then
         Duel.ConfirmCards(1-tp,c)
         Duel.Hint(HINT_SELECTMSG
+end
