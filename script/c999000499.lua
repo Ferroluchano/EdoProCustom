@@ -18,8 +18,12 @@ function c999000499.initial_effect(c)
     e1:SetTarget(c999000499.thTarget)
     e1:SetOperation(c999000499.thOperation)
     c:RegisterEffect(e1)
-    local e2 = e1:Clone()
+    local e2 = Effect.CreateEffect(c)
     e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+    e2:SetProperty(EFFECT_FLAG_DELAY)
+    e2:SetCondition(c999000499.thCondition)
+    e2:SetTarget(c999000499.thTarget)
+    e2:SetOperation(c999000499.thOperation)
     c:RegisterEffect(e2)
 
     -- Efecto de Retorno
