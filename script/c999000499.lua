@@ -1,5 +1,5 @@
 -- Library Dragonmaid
-function c200000002.initial_effect(c)
+function c999000499.initial_effect(c)
     -- Efecto de invocación especial
     local e1 = Effect.CreateEffect(c)
     e1:SetDescription(aux.Stringid(999000499, 0))
@@ -18,7 +18,7 @@ function c200000002.initial_effect(c)
     e2:SetCategory(CATEGORY_TOHAND + CATEGORY_SEARCH)
     e2:SetType(EFFECT_TYPE_IGNITION)
     e2:SetRange(LOCATION_MZONE)
-    e2:SetCountLimit(1, 200000003)
+    e2:SetCountLimit(1, 999000499)
     e2:SetTarget(c200000002.searchtarget)
     e2:SetOperation(c200000002.searchoperation)
     c:RegisterEffect(e2)
