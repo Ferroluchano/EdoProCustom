@@ -1,30 +1,30 @@
 -- Library Dragonmaid
-function c999000499.initial_effect(c)
+function s.initial_effect(c)
     -- Efecto de invocación especial
-    local e1 = Effect.CreateEffect(c)
+    local e1=.CreateEffect(c)
     e1:SetDescription(aux.Stringid(999000499, 0))
     e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
     e1:SetType(EFFECT_TYPE_IGNITION)
     e1:SetRange(LOCATION_HAND)
     e1:SetCountLimit(1, 999000499)
-    e1:SetCost(c200000002.spcost)
-    e1:SetTarget(c200000002.sptarget)
-    e1:SetOperation(c200000002.spoperation)
+    e1:SetCost(s.spcost)
+    e1:SetTarget(s.sptarget)
+    e1:SetOperation(s.spoperation)
     c:RegisterEffect(e1)
 
     -- Efecto de devolución
-    local e2 = Effect.CreateEffect(c)
+    local e2=.CreateEffect(c)
     e2:SetDescription(aux.Stringid(999000499, 1))
     e2:SetCategory(CATEGORY_TOHAND + CATEGORY_SEARCH)
     e2:SetType(EFFECT_TYPE_IGNITION)
     e2:SetRange(LOCATION_MZONE)
     e2:SetCountLimit(1, 999000499)
-    e2:SetTarget(c200000002.searchtarget)
-    e2:SetOperation(c200000002.searchoperation)
+    e2:SetTarget(s.searchtarget)
+    e2:SetOperation(s.searchoperation)
     c:RegisterEffect(e2)
 end
 
-function c999000499.spcost(e, tp, eg, ep, ev, re, r, rp, chk)
+function s.spcost(e, tp, eg, ep, ev, re, r, rp, chk)
     if chk == 0 then
         return Duel.CheckReleaseGroupCost(tp, Card.IsRace, 1, false, nil, RACE_DRAGON)
     end
@@ -32,7 +32,7 @@ function c999000499.spcost(e, tp, eg, ep, ev, re, r, rp, chk)
     Duel.Release(g, REASON_COST)
 end
 
-function c999000499.sptarget(e, tp, eg, ep, ev, re, r, rp, chk)
+function s.sptarget(e, tp, eg, ep, ev, re, r, rp, chk)
     if chk == 0 then
         return Duel.GetLocationCount(tp, LOCATION_MZONE) > 0
             and e:GetHandler():IsCanBeSpecialSummoned(e, 0, tp, false, false, POS_FACEUP_DEFENSE, tp)
@@ -40,7 +40,7 @@ function c999000499.sptarget(e, tp, eg, ep, ev, re, r, rp, chk)
     Duel.SetOperationInfo(0, CATEGORY_SPECIAL_SUMMON, e:GetHandler(), 1, 0, 0)
 end
 
-function c999000499.spoperation(e, tp, eg, ep, ev, re, r, rp)
+function s.spoperation(e, tp, eg, ep, ev, re, r, rp)
     local c = e:GetHandler()
     if not c:IsRelateToEffect(e) then
         return
@@ -49,7 +49,7 @@ function c999000499.spoperation(e, tp, eg, ep, ev, re, r, rp)
         return
     end
     -- Efecto de búsqueda
-    local e1 = Effect.CreateEffect(c)
+    local e1=.CreateEffect(c)
     e1:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_O)
     e1:SetCode(EVENT_SPSUMMON_SUCCESS)
     e1:SetCondition(c999000499.searchcondition)
@@ -59,9 +59,11 @@ function c999000499.spoperation(e, tp, eg, ep, ev, re, r, rp)
     c:RegisterEffect(e1)
 
     -- Efecto de devolución y Invocación Especial
-    local e2 = Effect.CreateEffect(c)
+    local e2=.CreateEffect(c)
     e2:SetDescription(aux.Stringid(999000499, 2))
     e2:SetCategory(CATEGORY_TOHAND + CATEGORY_SPECIAL_SUMMON)
     e2:SetType(EFFECT_TYPE_IGNITION)
     e2:SetRange(LOCATION_MZONE)
-    e2:SetCountLimit(1
+    e2:SetCountLimit(1)
+	end
+end
