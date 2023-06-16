@@ -1,63 +1,65 @@
 -- Library Dragonmaid
 -- ID: 999000499
--- Tipo: Dragón/Normal
--- Atributo: Fuego
--- Nivel: 4
--- ATK: 1600
--- DEF: 1200
+-- Tipo: Dragón
+-- Atributo: Luz
+-- ATK: 700
+-- DEF: 1800
 
 function c999000499.initial_effect(c)
-    -- Efecto de Invocación
-    -- Si esta carta es Invocada de Modo Normal o Especial, puedes seleccionar 1 monstruo "Dragonmaid" de Nivel 4 o menor en tu Cementerio y añadirlo a tu mano, pero no puedes activar sus efectos hasta el comienzo de la Fase de Batalla.
+    -- Efecto de búsqueda desde el Cementerio
     local e1 = Effect.CreateEffect(c)
-    e1:SetCategory(CATEGORY_TOHAND + CATEGORY_SPECIAL_SUMMON)
-    e1:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_O)
-    e1:SetCode(EVENT_SUMMON_SUCCESS)
+    e1:SetDescription(aux.Stringid(999000499,0))
+    e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+    e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+    e1:SetCode(EVENT_SUMMONED)
     e1:SetProperty(EFFECT_FLAG_DELAY)
-    e1:SetCondition(c999000499.thCondition)
-    e1:SetTarget(c999000499.thTarget)
-    e1:SetOperation(c999000499.thOperation)
+    e1:SetTarget(c999000499.searchTarget)
+    e1:SetOperation(c999000499.searchOperation)
     c:RegisterEffect(e1)
+
+    -- Efecto de Invocación Especial de monstruos "Dragonmaid" de Nivel 7 o mayor
     local e2 = Effect.CreateEffect(c)
-    e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+    e2:SetDescription(aux.Stringid(999000499,1))
+    e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SPECIAL_SUMMON)
+    e2:SetType(EFFECT_TYPE_IGNITION)
+    e2:SetRange(LOCATION_MZONE)
+    e2:SetCountLimit(1,999000499)
+    e2:SetTarget(c999000499.spSummonTarget)
+    e2:SetOperation(c999000499.spSummonOperation)
     c:RegisterEffect(e2)
-
-    -- Efecto de Retorno
-    -- Puedes devolver esta carta a la mano y, si lo haces, Invoca de Modo Especial 1 monstruo "Dragonmaid" de Nivel 7 o mayor desde tu mano o Cementerio.
-    local e3 = Effect.CreateEffect(c)
-    e3:SetCategory(CATEGORY_TOHAND + CATEGORY_SPECIAL_SUMMON)
-    e3:SetType(EFFECT_TYPE_IGNITION)
-    e3:SetRange(LOCATION_MZONE)
-    e3:SetCountLimit(1)
-    e3:SetCost(c999000499.rtnCost)
-    e3:SetTarget(c999000499.rtnTarget)
-    e3:SetOperation(c999000499.rtnOperation)
-    c:RegisterEffect(e3)
 end
 
--- Efecto de Invocación
-function c999000499.thCondition(e,tp,eg,ep,ev,re,r,rp)
-    return e:GetHandler():IsPreviousLocation(LOCATION_HAND)
+function c999000499.filter(c)
+    return c:IsSetCard(0x133) and c:IsLevelBelow(4) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
 end
 
-function c999000499.thFilter(c)
-    return c:IsRace(RACE_DRAGON) and c:IsAttribute(ATTRIBUTE_FIRE) and c:IsLevelBelow(4) and c:IsAbleToHand()
-end
-
-function c999000499.thTarget(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsExistingMatchingCard(c999000499.thFilter,tp,LOCATION_GRAVE,0,1,nil) end
+function c999000499.searchTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return Duel.IsExistingMatchingCard(c999000499.filter,tp,LOCATION_GRAVE,0,1,nil) end
     Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
 end
 
-function c999000499.thOperation(e,tp,eg,ep,ev,re,r,rp)
+function c999000499.searchOperation(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-    local g=Duel.SelectMatchingCard(tp,c999000499.thFilter,tp,LOCATION_GRAVE,0,1,1,nil)
+    local g=Duel.SelectMatchingCard(tp,c999000499.filter,tp,LOCATION_GRAVE,0,1,1,nil)
     if g:GetCount()>0 then
         Duel.SendtoHand(g,nil,REASON_EFFECT)
         Duel.ConfirmCards(1-tp,g)
-        local tc=g:GetFirst()
-        if tc:IsLocation(LOCATION_HAND) then
-            tc:RegisterFlagEffect(999000499,RESET_EVENT+RESETS_STANDARD,0,0)
-        end
     end
 end
+
+function c999000499.spSummonFilter(c,e,tp)
+    return c:IsSetCard(0x133) and c:IsLevelAbove(7) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
+
+function c999000499.spSummonTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return Duel.IsExistingMatchingCard(c999000499.spSummonFilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,e,tp)
+        and e:GetHandler():IsAbleToHand() end
+    Duel.SetOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),1,0,0)
+    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_GRAVE)
+end
+
+function c999000499.spSummonOperation(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    if c:IsRelateToEffect(e) and Duel.SendtoHand(c,nil,REASON_EFFECT)~=0 and c:IsLocation(LOCATION_HAND) then
+        Duel.ConfirmCards(1-tp,c)
+        Duel.Hint(HINT_SELECTMSG
