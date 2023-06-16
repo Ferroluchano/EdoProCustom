@@ -21,7 +21,7 @@ function c999000499.initial_effect(c)
 
     -- Efecto de Retorno
     -- Puedes devolver esta carta a la mano y, si lo haces, Invoca de Modo Especial 1 monstruo "Dragonmaid" de Nivel 7 o mayor desde tu mano o Cementerio.
-    local e2 = Effect.CreateEffect(c)
+    local e3 = Effect.CreateEffect(c)
     e3:SetCategory(CATEGORY_TOHAND + CATEGORY_SPECIAL_SUMMON)
     e3:SetType(EFFECT_TYPE_IGNITION)
     e3:SetRange(LOCATION_MZONE)
