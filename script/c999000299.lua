@@ -24,13 +24,13 @@ end
 function c999000299.cost(e, tp, eg, ep, ev, re, r, rp, chk)
     if chk == 0 then return Duel.IsExistingMatchingCard(Card.IsAbleToGraveAsCost, tp, LOCATION_HAND, 0, 1, e:GetHandler()) end
     Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_TOGRAVE)
-    local g = Duel.SelectMatchingCard(tp, Card.IsAbleToGraveAsCost, tp, LOCATION_HAND, 0, 1, 1, e:GetHandler())
+    local g = Duel.SelectMatchingCard(tp, Card.IsAbleToGraveAsCost, tp, LOCATION_HAND, 0, 1, e:GetHandler())
     Duel.SendtoGrave(g, REASON_COST)
 end
 
 -- Elige y cambia de posición a un monstruo enemigo
 function c999000299.target(e, tp, eg, ep, ev, re, r, rp, chk)
-    if chk == 0 then return Duel.IsExistingTarget(Card.IsFaceup, 1 - tp, 0, LOCATION_MZONE, 1, nil) end
+    if chk == 0 then return Duel.IsExistingTarget(Card.IsFaceup, 1 - tp, 0, LOCATION_MZONE, 1, 1, nil) end
     Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_POSCHANGE)
     local g = Duel.SelectTarget(tp, Card.IsFaceup, 1 - tp, 0, 1, 1, nil)
     Duel.SetOperationInfo(0, CATEGORY_POSITION, g, 1, 0, 0)
