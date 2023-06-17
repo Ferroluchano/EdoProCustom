@@ -15,9 +15,9 @@ function c999000299.initial_effect(c)
     c:RegisterEffect(e1)
 end
 
--- Verifica si puedes activar el efecto una vez por turno
+-- Verifica si puedes activar el efecto una vez por turno y si la carta está en el campo
 function c999000299.condition(e, tp, eg, ep, ev, re, r, rp)
-    return Duel.GetTurnPlayer() == tp
+    return Duel.GetTurnPlayer() == tp and e:GetHandler():IsLocation(LOCATION_MZONE)
 end
 
 -- Paga el costo de enviar una carta de la mano al Cementerio
