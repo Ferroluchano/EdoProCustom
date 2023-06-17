@@ -5,8 +5,8 @@ function c999000299.initial_effect(c)
     -- Efecto principal
     local e1 = Effect.CreateEffect(c)
     e1:SetCategory(CATEGORY_POSITION)
-    e1:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_O)
-    e1:SetCode(EVENT_PHASE + PHASE_MAIN1)
+    e1:SetType(EFFECT_TYPE_IGNITION)
+    e1:SetRange(LOCATION_MZONE)
     e1:SetCountLimit(1)
     e1:SetCondition(c999000299.condition)
     e1:SetCost(c999000299.cost)
@@ -17,7 +17,7 @@ end
 
 -- Verifica si puedes activar el efecto una vez por turno y si la carta está en el campo
 function c999000299.condition(e, tp, eg, ep, ev, re, r, rp)
-    return Duel.GetTurnPlayer() == tp and e:GetHandler():IsLocation(LOCATION_MZONE)
+    return Duel.GetTurnPlayer() == tp and e:GetHandler():IsFaceup()
 end
 
 -- Paga el costo de enviar una carta de la mano al Cementerio
