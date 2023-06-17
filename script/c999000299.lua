@@ -1,46 +1,43 @@
---魔轟神オルトロ
---Fabled Oltro
-local s,id=GetID()
-function s.initial_effect(c)
-	--special summon
-	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_POSITION)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetTarget(s.tg)
-    e1:SetOperation(s.activate)
-	c:RegisterEffect(e1)
+-- Nombre de la carta
+-- Descripción de la carta
+
+function c999000299.initial_effect(c)
+    -- Efecto principal
+    local e1 = Effect.CreateEffect(c)
+    e1:SetCategory(CATEGORY_POSITION)
+    e1:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_O)
+    e1:SetCode(EVENT_PHASE + PHASE_MAIN1)
+    e1:SetCountLimit(1)
+    e1:SetCondition(c999000299.condition)
+    e1:SetCost(c999000299.cost)
+    e1:SetTarget(c999000299.target)
+    e1:SetOperation(c999000299.operation)
+    c:RegisterEffect(e1)
 end
-s.listed_series={0x35}
-function s.spfilter(c,e,tp)
-	return c:IsSetCard(0x35) and c:IsMonster() and c:GetLevel()==3 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+
+-- Verifica si puedes activar el efecto una vez por turno
+function c999000299.condition(e, tp, eg, ep, ev, re, r, rp)
+    return Duel.GetTurnPlayer() == tp
 end
-function s.tg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and s.filter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,0,LOCATION_MZONE,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	local g=Duel.SelectTarget(tp,s.filter,tp,0,LOCATION_MZONE,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_POSITION,g,1,0,0)
-	end
-	local g=Duel.GetMatchingGroup(s.spfilter,tp,LOCATION_HAND,0,nil,e,tp)
-	local cg=nil
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	if #g==1 then
-		cg=Duel.SelectMatchingCard(tp,Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,1,g:GetFirst())
-	else cg=Duel.SelectMatchingCard(tp,Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,1,nil) end
-	Duel.SendtoGrave(cg,REASON_COST)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)
+
+-- Paga el costo de enviar una carta de la mano al Cementerio
+function c999000299.cost(e, tp, eg, ep, ev, re, r, rp, chk)
+    if chk == 0 then return Duel.IsExistingMatchingCard(Card.IsAbleToGraveAsCost, tp, LOCATION_HAND, 0, 1, nil) end
+    Duel.DiscardHand(tp, Card.IsAbleToGraveAsCost, 1, 1, REASON_COST)
 end
-function s.op(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp)
-	if #g>0 then
-		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
-	end
-	function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and tc:IsPosition(POS_FACEUP_ATTACK) then
-		Duel.ChangePosition(tc,POS_FACEUP_DEFENSE)
-	end
+
+-- Elige y cambia de posición a un monstruo enemigo
+function c999000299.target(e, tp, eg, ep, ev, re, r, rp, chk)
+    if chk == 0 then return Duel.IsExistingTarget(Card.IsFaceup, 1 - tp, LOCATION_MZONE, LOCATION_MZONE, 1, nil) end
+    Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_POSCHANGE)
+    local g = Duel.SelectTarget(tp, Card.IsFaceup, 1 - tp, LOCATION_MZONE, LOCATION_MZONE, 1, 1, nil)
+    Duel.SetOperationInfo(0, CATEGORY_POSITION, g, 1, 0, 0)
+end
+
+-- Cambia la posición del monstruo seleccionado
+function c999000299.operation(e, tp, eg, ep, ev, re, r, rp)
+    local tc = Duel.GetFirstTarget()
+    if tc:IsRelateToEffect(e) then
+        Duel.ChangePosition(tc, POS_FACEUP_DEFENSE)
+    end
 end
